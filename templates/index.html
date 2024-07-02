@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+<!--    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+    <style>
+        .green-cell {
+            background-color: green;
+            color: white;
+        }
+        .red-cell {
+            background-color: red;
+            color: white;
+        }
+        .normal-cell {
+            background-color: yellow;
+            color: black;
+        }
+    </style>
+    <script>
+        // Auto-refresh the page every 5 seconds
+        setTimeout(function(){
+            window.location.reload(1);
+        }, 5000);
+    </script>
+</head>
+<body>
+    <p>Last Updated: {{ last_updated }}</p>
+    <h1>Realtime Data Dashboard</h1>
+     <form method="POST">
+        <label for="modified_by">Select Modified By:</label>
+        <select id="modified_by" name="modified_by" onchange="this.form.submit()">
+            <option value="">All</option>
+            {% for user in modified_by_users %}
+            <option value="{{ user.modified_by }}" {% if user.modified_by == selected_modified_by %}selected{% endif %}>{{ user.modified_by }}</option>
+            {% endfor %}
+        </select>
+    </form>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Comments</th>
+            <th>Created By</th>
+            <th>Created On</th>
+            <th>Modified By</th>
+            <th>Modified On</th>
+
+        </tr>
+        {% for item in data %}
+        <tr>
+            <td>{{ item.visitor_id }}</td>
+            <td>{{ item.visitor_name }}</td>
+            <td>{{ item.visitor_phone }}</td>
+            <td>{{ item.comments }}</td>
+            <td class="{% if item.created_by == 'Sales' %}green-cell{% elif item.created_by == 'Admin' %}red-cell{% else %}normal-cell{% endif %}">{{ item.created_by }}</td>
+            <td>{{ item.created_on }}</td>
+            <td>{{ item.modified_by }}</td>
+            <td>{{ item.modified_on }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+</html>
